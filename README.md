@@ -1,25 +1,26 @@
 <!-- ⚠️ This README has been generated from the file(s) "blueprint.md" ⚠️-->
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#-iprbooks-bulk-dumper)
-# <p align=center>📚 Iprbooks Bulk Dumper
+# <p align=center>📚 IPRBooks Dumper
 
 
 
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#---golang------pdf----iprbooksruhttpswwwiprbookshopru------)
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)]()
 
 ## ➤ Софт, написанный на Golang для скачивания книг в формате .pdf с электронной библиотеки [Iprbooks.ru](https://www.iprbookshop.ru). Есть возможность скачать сразу несколько книг.
 
 
 
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#demo)
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#-demo)
 
 ## ➤ Demo
 
 ![Demo of work](https://i.ibb.co/4Fy7c4h/image.png)
 
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#-%D1%81%D0%BA%D0%B0%D1%87%D0%B0%D1%82%D1%8C-%D1%80%D0%B5%D0%BB%D0%B8%D0%B7-v10)
+# ➤ Скачать релиз v1.0
+- [Windows](https://github.com/DixonJRome/IprBooksDumper/releases/download/v1.0/IprbooksDumper.exe)
 
 
-
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#installation)
 
 ## ➤ Installation
 
@@ -29,13 +30,13 @@
 2. Склонируйте репозиторий:
 
 ```
-git clone https://github.com/NoneNameDeveloper/IprbooksDumper.git
+git clone https://github.com/DixonJRome/IprBooksDumper.git
 ```
 
 3. Перейдите в директорию со скачанным репозиторием:
 
 ```
-cd IprbooksDumper
+cd IprBooksDumper
 ```
 
 4. Соберите проект:
