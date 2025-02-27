@@ -6,12 +6,20 @@ import (
 )
 
 // SaveToFile создание pdf файла
-func SaveToFile(name string, data []byte) {
-	f, err := os.Create(name + ".pdf")
+func SaveToFile(bookID string, data []byte) {
+	filename := bookID + ".pdf"
 
+	f, err := os.Create(filename)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Ошибка при создании файла:", err)
+		return
 	}
 
-	f.Write(data)
+	_, err = f.Write(data)
+	if err != nil {
+		fmt.Println("Ошибка при записи файла:", err)
+	}
+
+	f.Close()
+	fmt.Println("Файл сохранён как", filename)
 }

@@ -2,7 +2,6 @@ package engine
 
 import (
 	"errors"
-	"github.com/gocolly/colly"
 	"io"
 	"log"
 	"net/http"
@@ -10,6 +9,8 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+
+	"github.com/gocolly/colly"
 )
 
 type DumpData struct {
@@ -18,10 +19,10 @@ type DumpData struct {
 }
 
 // DumpBookData получает декодированный ряд байтов книги и ее название
-func DumpBookData(bookIdList []int) (resArray []DumpData) {
+func DumpBookData(bookIdList []int, username, password string) (resArray []DumpData) {
 
 	for _, bookId := range bookIdList {
-		resValue, err := dumpData(bookId)
+		resValue, err := dumpData(bookId, username, password)
 
 		if err != nil {
 			log.Fatal(err)
@@ -34,16 +35,15 @@ func DumpBookData(bookIdList []int) (resArray []DumpData) {
 	return resArray
 }
 
-func dumpData(bookId int) (DumpData, error) {
+func dumpData(bookId int, username, password string) (DumpData, error) {
 	// создаем авторизованного клиента
-	client := Auth()
+	client := Auth(username, password) // Передаем логин и пароль
 
 	// ссылка на зашифрованный контент книги
 	link := "https://www.iprbookshop.ru/pdfstream.php?publicationId=" + strconv.Itoa(bookId) + "&part=null"
 
 	requestModel, err := http.NewRequest("GET", link, nil)
 
-	// сайт упал или какие то другие неполадки
 	if err != nil {
 		return DumpData{}, errors.New("Сайт недоступен!")
 	}
@@ -55,7 +55,6 @@ func dumpData(bookId int) (DumpData, error) {
 		return DumpData{}, errors.New("Сайт недоступен!")
 	}
 
-	// закрываем запрос во избежание потерь ресурсов
 	defer response.Body.Close()
 
 	bodyText, err := io.ReadAll(response.Body)
@@ -68,7 +67,7 @@ func dumpData(bookId int) (DumpData, error) {
 		return DumpData{}, errors.New("Книги не существует!")
 	}
 
-	return DumpData{Name: GetBookName(bookId), BookBytes: DecodeBytes(bodyText)}, nil
+	return DumpData{Name: strconv.Itoa(bookId), BookBytes: DecodeBytes(bodyText)}, nil
 }
 
 // Min поиск минимального значения в массиве
@@ -84,32 +83,31 @@ func Min(arr []int) int {
 }
 
 // Auth возвращает авторизованный клиент
-func Auth() http.Client {
+func Auth(username, password string) http.Client {
 	authUrl := "https://www.iprbookshop.ru/95835"
 
-	// данные для авторизации ;)
+	// данные для авторизации
 	data := url.Values{}
 	data.Set("action", "login")
-	data.Set("username", "mtuci")
-	data.Set("password", "2xNTqGZL")
+	data.Set("username", username)
+	data.Set("password", password)
 	data.Set("rememberme", "1")
 
 	client := &http.Client{}
-	r, _ := http.NewRequest(http.MethodPost, authUrl, strings.NewReader(data.Encode())) // URL-encoded payload
+	r, _ := http.NewRequest(http.MethodPost, authUrl, strings.NewReader(data.Encode()))
 	r.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
 	// запрос на авторизацию
 	authReq, _ := client.Do(r)
 
-	// создаем дальнейший контейнер для куки авторизации
+	// создаем контейнер для куки авторизации
 	cookieJar, _ := cookiejar.New(nil)
-
 	url, _ := url.Parse(authUrl)
 
 	// устанавливаем куки авторизации
 	cookieJar.SetCookies(url, authReq.Cookies())
 
-	// помещаем их в клиент
+	// создаем клиент с авторизацией
 	client = &http.Client{Jar: cookieJar}
 
 	return *client
